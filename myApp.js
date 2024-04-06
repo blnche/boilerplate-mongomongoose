@@ -7,12 +7,37 @@ mongoose.connect(mySecret, { useNewUrlParser: true, useUnifiedTopology: true });
 
 let Person;
 
+const personSchema = new mongoose.Schema( {
+  name: {
+    type: String,
+    required: true,
+  }, 
+  age: Number,
+  favoriteFoods: [String]
+});
+
+Person = mongoose.model('Person', personSchema);
+
 const createAndSavePerson = (done) => {
-  done(null /*, data*/);
+  let blanche = new Person({
+    name: 'Blanche',
+    age: 25,
+    favoriteFoods: ['pizza', 'galettes', 'crêpes']
+  })
+
+  blanche.save( (err, data) => {
+    if(err) return console.log(err);
+
+    done(null , data);
+  })
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
-  done(null /*, data*/);
+  Person.create(arrayOfPeople, (err, data) => {
+    if(err) return console.log(err);
+
+    done(null , data);
+  });
 };
 
 const findPeopleByName = (personName, done) => {
